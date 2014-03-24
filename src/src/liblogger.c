@@ -19,6 +19,7 @@
 #include <liblogger/liblogger.h>
 #include "file_logger_impl.h"
 #include "socket_logger_impl.h"
+#include "LLTimeUtil.h"
 
 #ifndef DISABLE_THREAD_SAFETY
 	#include "tPLMutex.h"
@@ -144,13 +145,15 @@ int vsLogStub(LogLevel logLevel,
 	const char* fmt,va_list ap)
 {
 	int retVal = 0;
+	char curDateTime[32];
+	LLGetCurDateTime(curDateTime,sizeof(curDateTime));
 	CHECK_AND_INIT_LOGGER;
 
 	__LOCK_MUTEX;
 
 	retVal = pLogWriter->log(pLogWriter,logLevel,
 #ifdef VARIADIC_MACROS
-			moduleName,file,funcName,lineNum,
+			curDateTime,moduleName,file,funcName,lineNum,
 #endif
 			fmt,ap);
 

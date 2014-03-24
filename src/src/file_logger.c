@@ -36,6 +36,7 @@
 static int sWriteToFile(LogWriter *_this,
 		const LogLevel logLevel ,
 #ifdef VARIADIC_MACROS
+   		const char* timeStamp,
 		const char* moduleName,
 		const char* file,const char* funcName, const int lineNum, 
 #endif
@@ -193,6 +194,7 @@ int InitFileLogger(LogWriter** logWriter,tFileLoggerInitParams* initParams)
 static int sWriteToFile(LogWriter *_this,
 		const LogLevel logLevel,
 #ifdef VARIADIC_MACROS
+   		const char* timeStamp,
 		const char* moduleName,
 		const char* file,const char* funcName, const int lineNum, 
 #endif
@@ -206,9 +208,9 @@ static int sWriteToFile(LogWriter *_this,
 	}
 	else
 	{
-		fprintf(flw->fp,sGetLogPrefix(logLevel));
+		fprintf(flw->fp,"%s ",sGetLogPrefix(logLevel));
 #ifdef VARIADIC_MACROS
-		fprintf(flw->fp,"%s:%s:%s:%d:",moduleName,file,funcName,lineNum);
+		fprintf(flw->fp,"%s:%s:%s:%s:%d:",timeStamp,moduleName,file,funcName,lineNum);
 #endif
 		vfprintf(flw->fp,fmt,ap); 
 		fprintf(flw->fp,"\n");
